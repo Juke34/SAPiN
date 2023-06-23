@@ -54,12 +54,6 @@ python3 -m SAPiN -i t/bwamem2_sorted.bam
 
 ## Parameters
 
-
-    parser.add_argument("-z", "--gzip", default=False, action="store_true", help="Gzip output file.")
-
-    parser.add_argument("-cf", "--cover_filter", default=None, type=int, help="Integer, filter output to report only site with coverage >= <Integer>.")
-    parser.add_argument("-qf", "--quality_filter", default=None, type=int, help="Integer, filter output to report only site with quality >= <Integer>.")
-
 | Parameter | Type | Description |
 | --- | --- | --- |
 |  -i, --input     | String | Path to the SAM/BAM input file |
