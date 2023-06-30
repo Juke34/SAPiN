@@ -152,7 +152,12 @@ pip uninstall sapin
 ## Usage
 
 ```
-sapin -i t/bwamem2_sorted.bam -
+sapin -a t/reference.bam -f t/reference.fasta 
+```
+
+**advanced:**
+```
+sapin -a t/reference.bam -f t/reference.fasta -g t/reference_agat.gff3 -cf 1000 -bqf 20 -p
 ```
 
 ## Parameters
