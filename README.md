@@ -17,50 +17,158 @@
 
 ## Foreword
 
-This tool aims to summarize SAM/BAM read alignment by pileup or reads at each position in a tabulated way. More convenient as a mpileup format and containing extra information.
+This tool aims to summarize BAM read alignment by pileup or reads at each position in a tabulated way. More convenient as a mpileup format and containing extra information.
 
 ## Output
 
 Here an example of output you would get with SAPiN
 
 ```
-##COLUMN_INFO=<ID=SEQID,Type=String,Description="The ID of the landmark used to establish the coordinate system for the current feature.">
-##COLUMN_INFO=<ID=POS,Type=Integer,Description="The reference position, with the 1st base having position 1.">
-##COLUMN_INFO=<ID=REF,Type=String,Description="The reference base. Each base must be one of A,C,G,T,N (case insensitive).">
-##COLUMN_INFO=<ID=QUAL,Type=Integer,Description="Quality: Mean Phred-scaled quality score for the sequenced position.">
-##COLUMN_INFO=<ID=A,Type=Integer,Description="Number of Adenine nucleotide at the position">
-##COLUMN_INFO=<ID=T,Type=Integer,Description="Number of Thymine nucleotide at the position">
-##COLUMN_INFO=<ID=G,Type=Integer,Description="Number of Guanosine nucleotide at the position">
-##COLUMN_INFO=<ID=C,Type=Integer,Description="Number of Cytosine nucleotide at the position">
-##COLUMN_INFO=<ID=N,Type=Integer,Description="Number of Unknown nucleotide at the position">
-##COLUMN_INFO=<ID=INS,Type=Integer,Description="Number of Insertion at the position">
-##COLUMN_INFO=<ID=DEL,Type=Integer,Description="Number of Deletion at the position">
-##COLUMN_INFO=<ID=IUPAC,Type=Integer,Description="Number of IUPAC nucleotide at the position">
-##COLUMN_INFO=<ID=COV,Type=Integer,Description="Coverage at the position">
-SEQID   POS REF QUAL    A   T   G   C   N   INS DEL IUPAC   COV
+SEQID   POS     REF     QUAL    A       T       G       C       N       INS     DEL     IUPAC   COV     COV_ATGC    MUT_RAT APOBEC  ADAR    REGION  CODON   NUC     DESC
+HPV42REF        118     C       38.28   0       16      0       1356    0       0       0       0       1374    1372    1.17    1.2     .       AATGTCAGGTA             CAG     1       gene:ID=gene-1;Name=E6@@mRNA:ID=nbis-rna-1;Parent=gene-1;Name=E6@@exon:ID=nbis-exon-1;Parent=nbis-rna-1;Name=E6@@CDS:ID=cds-1;Parent=nbis-rna-1;Name=E6
 ```
+
+Here a description of the different fields
+
+| Field | Optional | Type | Description |
+| --- | --- | --- | --- |
+| SEQID |  | String | The ID of the landmark used to establish the coordinate system for the current feature. |
+| POS   |  | Integer | The reference position, with the 1st base having position 1 |
+| REF   |  | Character | The reference base. | 
+| QUAL  |  | Float | Mean Phred-scaled quality score for the sequenced position. |
+| A     |  | Integer | Number of Adenine nucleotide at the position |
+| T     |  | Integer | Number of Thymine nucleotide at the position |
+| G     |  | Integer | Number of Guanosine nucleotide at the position |
+| C     |  | Integer | Number of Cytosine nucleotide at the position |
+| N     |  | Integer | Number of Unknown nucleotide at the position |
+| INS     |  | Integer | Number of Insertion at the position |
+| DEL     |  | Integer | Number of Deletion at the position |
+| IUPAC     |  | Integer | Number of IUPAC nucleotide (minus A,T,G,C,N) at the position |
+| COV     |  | Integer | Coverage at the position (including INS,DEL,IUPAC) |
+| COV_ATGC    |  | Integer | Coverage at the position of A,T,G,C nucleotide only |
+| MUT_RAT    |  | Float | Mutation ration (COV_ATGC/nb mutated nuc*100) |
+| APOBEC    |  | Float | Mutation ration of C-to-T or G-to-A. Usefull when studying transcriptomes |
+| ADAR    |  | Float | Mutation ration of A-to-G or T-to-C. Usefull when studying transcriptomes |
+| REGION    |  | STRING | substring of 5 nucleotide on each side. Usefill to make pattern |
+| CODON    | Only if GFF provided | STRING | substring of codon in phase/frame (/!\ do not take spliced CDS in account). |
+| NUC    | Only if GFF provided | Integer | 1,2 or 3. Indicate in the CODON (previous column) which nucleotide is the one studied at the position |
+| DESC    | Only if GFF provided | STRING | feature type and attributes extracted from the gff at the position |
+
 ## Install
 
 ### Prerequisite
 
  * python3
  * pysam
+ * gffutils
+ * matplotlib
+
+ They should be automatically installed during SAPiN installation.
+
+#### Installation with pip:
+
+```bash
+pip install git+https://github.com/Juke34/SAPiN.git
+```
+
+or if you do not have administrative rights on your machine
+
+```bash
+pip install --user git+https://github.com/Juke34/SAPiN.git
+```
+
+
+#### Installation with git:
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Juke34/SAPiN.git
+```
+
+Move into the folder:
+
+```bash
+cd SAPiN/
+```
+
+Install:
+
+```bash
+python setup.py install
+```
+
+or if you do not have administrative rights on your machine:
+
+```bash
+python setup.py install --user
+```
+
+#### Check installation
+
+Executing:
+```bash
+sapin
+```
+
+or
+
+```bash
+sapin -h
+```
+
+will display some help.
+
+## Update
+
+#### Update with pip:
+
+```bash
+pip install git+https://github.com/Juke34/SAPiN.git --upgrade
+```
+
+or if you do not have administartive rights on your machine
+
+```bash
+pip install --user git+https://github.com/Juke34/SAPiN.git --upgrade
+```
+
+#### Update with git:
+
+Move into the repository folder and execute:
+
+```bash
+git pull
+cd SAPiN/
+python setup.py install
+```
+
+## Uninstall
+
+```bash
+pip uninstall sapin
+```
 
 ## Usage
 
 ```
-python3 -m SAPiN -i t/bwamem2_sorted.bam 
+sapin -i t/bwamem2_sorted.bam -
 ```
 
 ## Parameters
 
 | Parameter | Type | Description |
 | --- | --- | --- |
-|  -i, --input     | String | Path to the SAM/BAM input file |
+|  -a, --ali     | String | Path to the BAM input file |
+|  -f, --fasta     | String | Path to the reference fasta file used to align the reads against. |
+|  -g, --gff     | String | Optional - Path to the reference gff |
 |  -o, --output    | String | Path to the tsv output file |
+|  -p, --plot    | Boolean | To plot the ratio of mutation per position (sapin_plot.svg by default. If outpout provided output.svg). |
 |  -q, --quiet    | Boolean | "Decrease verbosity |
 |  -v, --verbose    | Boolean | Increase verbosity |
 |  -z, --gzip    | Boolean | Gzip output file |
 |  -s, --shame    | Boolean | Suppress the shameless plug |
 |  -cf, --cover_filter    | Integer | filter output to report only site with coverage >= <Integer> |
-|  -qf, --quality_filter    | Integer | filter output to report only site with quality >= <Integer> |
+|  -bqf, --base_quality_filter    | Integer | filter output to report only site with base quality >= <Integer> (default 0) |
+|  -mqf, --base_quality_filter    | Integer | filter output to report only site with mapping quality >= <Integer> (default 0) |
+|  -mf, --mutation_filter    | Integer | filter output to report only site where the mutation ratio >= <Integer> (default 0) |
