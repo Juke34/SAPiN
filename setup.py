@@ -20,7 +20,7 @@ setup(
     packages=find_packages(),
 
     install_requires=[
-        'gffutils >= 0.11.1', 'numpy>=1.22', 'matplotlib',
+        'gffutils >= 0.11.1', 'numpy>=1.22', 'matplotlib', 'pysam'
         ],
     include_package_data=True,
 
