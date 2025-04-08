@@ -2,17 +2,11 @@
 import pysam
 import gffutils
 import matplotlib.pyplot as plt
-import numpy as np
 import os
 import sys
 import gzip
-import json
-import pprint
-import time
-import shutil
 import logging
 import argparse
-import re
 import importlib.metadata
 
 script_name = "SAPiN"
@@ -20,7 +14,7 @@ script_version = importlib.metadata.version(script_name)
 
 shameless_plug="""
     #############################################################################
-    # SAPiN v{str1}                                                               #
+    # SAPiN v{str1}                                                              #
     # IRD - French National Research Institute for Sustainable Development      #
     # Author: Jacques Dainat                                                    #
     # Please visit https://github.com/Juke34/SAPiN for more information         #
