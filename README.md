@@ -11,7 +11,6 @@
    * [Foreword](#foreword)
    * [Install](#install)
    * [Usage](#usage)
-     * [Usage](#usage)
    * [Output](#output)     
    * [Acknowledgement](#acknowledgement)
 
@@ -127,8 +126,7 @@ Move into the repository folder and execute:
 
 ```bash
 git pull
-cd SAPiN/
-python setup.py install
+python -m pip install .
 ```
 
 ## Uninstall
