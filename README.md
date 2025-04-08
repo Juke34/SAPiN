@@ -86,22 +86,10 @@ Clone the repository:
 git clone https://github.com/Juke34/SAPiN.git
 ```
 
-Move into the folder:
-
-```bash
-cd SAPiN/
-```
-
 Install:
 
 ```bash
-python setup.py install
-```
-
-or if you do not have administrative rights on your machine:
-
-```bash
-python setup.py install --user
+python -m pip install .
 ```
 
 #### Check installation

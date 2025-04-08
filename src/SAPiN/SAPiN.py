@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
-from SAPiN.version import __version__
 import pysam
 import gffutils
 import matplotlib.pyplot as plt
-import numpy as np
 import os
 import sys
 import gzip
-import json
-import pprint
-import time
-import shutil
 import logging
 import argparse
-import re
+import importlib.metadata
+
+script_name = "SAPiN"
+script_version = importlib.metadata.version(script_name)
 
 shameless_plug="""
     #############################################################################
-    # SAPiN v{str1}                                                                #
+    # SAPiN v{str1}                                                              #
     # IRD - French National Research Institute for Sustainable Development      #
     # Author: Jacques Dainat                                                    #
     # Please visit https://github.com/Juke34/SAPiN for more information         #
     #############################################################################
-\n""".format(str1=__version__)
+\n""".format(str1=script_version)
 
 TODO="""
 TODO: ...
@@ -349,7 +346,7 @@ def main():
                 outfile.write(dict_info["SEQID"] + "\t" + str(dict_info["POS"]) + "\t" + dict_info["REF"] + "\t" + str(dict_info["QUAL"]) + "\t" + str(dict_info["A"]) + "\t"
                     + str(dict_info["T"]) + "\t" + str(dict_info["G"]) + "\t" + str(dict_info["C"]) + "\t" + str(dict_info["N"]) + "\t" + str(dict_info["INS"]) + "\t" 
                     + str(dict_info["DEL"]) + "\t" + str(dict_info["IUPAC"]) + "\t" + str(dict_info["COV"]) + "\t" + str(dict_info["COV_ATGC"]) + "\t" + str(dict_info["MUT_RAT"]) + "\t" 
-                    + str(dict_info["APOBEC"]) + "\t" +  str(dict_info["ADAR"]) + "\t" + ref_region + "\t" )
+                    + str(dict_info["APOBEC"]) + "\t" +  str(dict_info["ADAR"]) + "\t" + ref_region)
                 
                 if args.gff:
                     outfile.write("\t" + AA + "\t" + str(phase) + "\t" + info)
