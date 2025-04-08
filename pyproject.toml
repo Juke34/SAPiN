@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.2", "wheel"]
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+exclude = ["img*", "t"]
+
+[project]
+name = "SAPiN"
+description = "summarize BAM read alignment by pileup or reads at each position in a tabulated way"
+version = "0.2"
+authors = [{ name = "Jacques Dainat" }]
+readme = { file = "../README.md", content-type = "text/markdown" }
+license = "GPL-3.0"
+license-files = ["../LICENSE"]
+requires-python = ">=3.8"
+dependencies = ["gffutils >= 0.11.1", "numpy>=1.22", "matplotlib", "pysam"]
+
+[project.scripts]
+sapin = "SAPiN:main"

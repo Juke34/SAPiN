@@ -1,9 +1,0 @@
-Metadata-Version: 2.1
-Name: SAPiN
-Version: 0.1
-Summary: summarize BAM read alignment by pileup or reads at each position in a tabulated way
-Home-page: https://github.com/Juke34/SAPiN
-Download-URL: https://github.com/Juke34/SAPiN/archive/v0.1.tar.gz
-Author: Jacques Dainat
-License: GPL-3.0
-License-File: LICENSE
