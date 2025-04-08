@@ -1,3 +1,6 @@
 .DS_Store
 *.log
 *__pycache__*
+SAPiN.egg-info/
+build/
+dist/
