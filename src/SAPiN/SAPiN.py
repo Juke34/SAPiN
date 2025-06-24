@@ -274,7 +274,7 @@ def main():
                 if nuc != ref_base:
                     nb_mut+=dict_info[nuc]
             perc_mut = round(nb_mut*100/cov_mut,2)
-            if perc_mut <= args.mutation_filter:
+            if perc_mut < args.mutation_filter:
                 print_line=None
             else:
                 dict_info["MUT_RAT"]=perc_mut
