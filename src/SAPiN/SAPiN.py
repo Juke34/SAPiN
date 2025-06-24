@@ -139,7 +139,7 @@ def main():
             logging.error('Failed to create intergenic features: '+ str(e))
 
     # Output header
-    header = "SEQID\tPOS\tREF\tQUAL\tA\tT\tG\tC\tN\tINS\tDEL\tIUPAC\tCOV\tCOV_ATGC\tMUT_RAT\tAPOBEC\tADAR\tREGION"
+    header = "SEQID\tPOS\tREF\tQUAL\tA\tC\tG\tT\tN\tINS\tDEL\tIUPAC\tCOV\tCOV_ACGT\tMUT_RAT\tAPOBEC\tADAR\tREGION"
     if args.gff:
         header+="\tCODON\tNUC\tDESC"
     header+="\n"
@@ -155,13 +155,13 @@ def main():
         "REF": ".",
         "QUAL": ".",
         "A": "",
-        "T": "",
-        "G": "",
         "C": "",
+        "G": "",
+        "T": "",
         "N": "",
         "IUPAC": "",
         "COV": "",
-        "COV_ATGC": "",
+        "COV_ACGT": "",
         "APOBEC": "",
         "ADAR": ""         
     }
@@ -178,9 +178,9 @@ def main():
 
         dict_nuc = {
         "A": 0,
-        "T": 0,
-        "G": 0,
         "C": 0,
+        "G": 0,
+        "T": 0,
         "N": 0,
         "IUPAC": 0,
         "INS": 0,
@@ -221,9 +221,9 @@ def main():
 
         #Fill dict_info by dict_nuc
         dict_info["A"] = dict_nuc["A"]
-        dict_info["T"] = dict_nuc["T"]
-        dict_info["G"] = dict_nuc["G"]
         dict_info["C"] = dict_nuc["C"]
+        dict_info["G"] = dict_nuc["G"]
+        dict_info["T"] = dict_nuc["T"]
         dict_info["N"] = dict_nuc["N"]
         dict_info["INS"] = dict_nuc["INS"]
         dict_info["DEL"] = dict_nuc["DEL"]
@@ -264,17 +264,17 @@ def main():
             dict_info["REF"]=ref_base 
             
             # COV_FILTER
-            dict_info["COV_ATGC"] = dict_info["A"] + dict_info["T"] + dict_info["G"] + dict_info["C"]
+            dict_info["COV_ACGT"] = dict_info["A"] + dict_info["C"] + dict_info["G"] + dict_info["T"]
             
             # apply mutation filter
-            cov_mut=dict_info["COV_ATGC"]+dict_info["INS"]+dict_info["DEL"] # Need to get coverage for mutations checked
+            cov_mut=dict_info["COV_ACGT"]+dict_info["INS"]+dict_info["DEL"] # Need to get coverage for mutations checked
             nb_mut=0
             nb_not_mut=0
-            for nuc in ["A","T","G","C","INS","DEL"]:
+            for nuc in ["A","C","G","T","INS","DEL"]:
                 if nuc != ref_base:
                     nb_mut+=dict_info[nuc]
             perc_mut = round(nb_mut*100/cov_mut,2)
-            if perc_mut <= args.mutation_filter:
+            if perc_mut < args.mutation_filter:
                 print_line=None
             else:
                 dict_info["MUT_RAT"]=perc_mut
@@ -287,17 +287,17 @@ def main():
 
                 # APOBEC
                 dict_info["APOBEC"]="."
-                if dict_info["REF"] == "C" and dict_info["COV_ATGC"] > 0:
-                    dict_info["APOBEC"] = round(dict_info["T"] / dict_info["COV_ATGC"] * 100, 1)
-                if dict_info["REF"] == "G" and dict_info["COV_ATGC"] > 0:
-                    dict_info["APOBEC"] = round(dict_info["A"] / dict_info["COV_ATGC"] * 100, 2)
+                if dict_info["REF"] == "C" and dict_info["COV_ACGT"] > 0:
+                    dict_info["APOBEC"] = round(dict_info["T"] / dict_info["COV_ACGT"] * 100, 1)
+                if dict_info["REF"] == "G" and dict_info["COV_ACGT"] > 0:
+                    dict_info["APOBEC"] = round(dict_info["A"] / dict_info["COV_ACGT"] * 100, 2)
 
                 # ADAR
                 dict_info["ADAR"]="."
-                if dict_info["REF"] == "A" and dict_info["COV_ATGC"] > 0:
-                    dict_info["ADAR"] = round(dict_info["G"] / dict_info["COV_ATGC"] * 100, 2)
-                if dict_info["REF"] == "T" and dict_info["COV_ATGC"] > 0:
-                        dict_info["ADAR"] = round(dict_info["C"] / dict_info["COV_ATGC"] * 100, 2)
+                if dict_info["REF"] == "A" and dict_info["COV_ACGT"] > 0:
+                    dict_info["ADAR"] = round(dict_info["G"] / dict_info["COV_ACGT"] * 100, 2)
+                if dict_info["REF"] == "T" and dict_info["COV_ACGT"] > 0:
+                    dict_info["ADAR"] = round(dict_info["C"] / dict_info["COV_ACGT"] * 100, 2)
 
                 # get region
                 ref_region="."
@@ -343,10 +343,26 @@ def main():
                     info = "@@".join(info_list)
 
             if print_line:
-                outfile.write(dict_info["SEQID"] + "\t" + str(dict_info["POS"]) + "\t" + dict_info["REF"] + "\t" + str(dict_info["QUAL"]) + "\t" + str(dict_info["A"]) + "\t"
-                    + str(dict_info["T"]) + "\t" + str(dict_info["G"]) + "\t" + str(dict_info["C"]) + "\t" + str(dict_info["N"]) + "\t" + str(dict_info["INS"]) + "\t" 
-                    + str(dict_info["DEL"]) + "\t" + str(dict_info["IUPAC"]) + "\t" + str(dict_info["COV"]) + "\t" + str(dict_info["COV_ATGC"]) + "\t" + str(dict_info["MUT_RAT"]) + "\t" 
-                    + str(dict_info["APOBEC"]) + "\t" +  str(dict_info["ADAR"]) + "\t" + ref_region)
+                outfile.write(
+                    dict_info["SEQID"] + "\t" + 
+                    str(dict_info["POS"]) + "\t" +
+                    dict_info["REF"] + "\t" +
+                    str(dict_info["QUAL"]) + "\t" +
+                    str(dict_info["A"]) + "\t" +
+                    str(dict_info["C"]) + "\t" +
+                    str(dict_info["G"]) + "\t" +
+                    str(dict_info["T"]) + "\t" +
+                    str(dict_info["N"]) + "\t" +
+                    str(dict_info["INS"]) + "\t" +
+                    str(dict_info["DEL"]) + "\t" +
+                    str(dict_info["IUPAC"]) + "\t" +
+                    str(dict_info["COV"]) + "\t" +
+                    str(dict_info["COV_ACGT"]) + "\t" +
+                    str(dict_info["MUT_RAT"]) + "\t" +
+                    str(dict_info["APOBEC"]) + "\t" +
+                    str(dict_info["ADAR"]) + "\t" +
+                    ref_region
+                    )
                 
                 if args.gff:
                     outfile.write("\t" + AA + "\t" + str(phase) + "\t" + info)
